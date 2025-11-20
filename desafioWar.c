@@ -3,48 +3,39 @@
 #include <string.h>
 #include <time.h>
 
-#define MAX_NOME 30
-#define MAX_COR 10
+#define MAX_NOME 50
+#define MAX_COR 100
 
 // Estrutura que representa um território
 typedef struct {
-char nome[MAX_NOME];
-char cor[MAX_COR];
-int tropas;
+    char nome[MAX_NOME];
+    char cor[MAX_COR];
+    int tropas;
 } Territorio;
 
 // Função para cadastrar territórios dinamicamente
 Territorio* cadastrarTerritorios(int qtd) {
-Territorio* mapa = (Territorio*) calloc(qtd, sizeof(Territorio));
-if (!mapa) {
-printf("Erro ao alocar memoria.\n");
-exit(1);
-}
+    Territorio* mapa = (Territorio*) calloc(qtd, sizeof(Territorio));
+    if (!mapa) {
+        printf("Erro ao alocar memoria.\n");
+        exit(1);
+    }
 
-for (int i = 0; i < qtd; i++) {
-    printf("Cadastro do Territorio %d\n", i + 1);
-    printf("Nome: ");
-    scanf(" %29[^\n]", mapa[i].nome); // lê até 29 caracteres ou espaço
-    printf("Cor do Exército: ");
-    scanf(" %9s", mapa[i].cor);
-    printf("Número de Tropas: ");
-    scanf("%d", &mapa[i].tropas);
-    printf("\n");
+    for (int i = 0; i < qtd; i++) {
+        printf("Cadastro do Territorio %d\n", i + 1);
+        printf("Nome: ");
+        fgets(mapa[i].nome, MAX_NOME, stdin);
+        mapa[i].nome[strcspn(mapa[i].nome, "\n")] = 0; // Remove o caractere de nova linha
+        printf("Cor do Exército: ");
+        fgets(mapa[i].cor, MAX_COR, stdin);
+        mapa[i].cor[strcspn(mapa[i].cor, "\n")] = 0; // Remove o caractere de nova linha
+        printf("Número de Tropas: ");
+        scanf("%d", &mapa[i].tropas);
+        getchar(); // Limpa o buffer
+        printf("\n");
+    }
+    return mapa;
 }
-return mapa;
-}
-
-// Função para exibir o mapa de territórios
-void exibirMapa(Territorio* mapa, int qtd) {
-printf("===== MAPA DE TERRITORIOS =====\n");
-for (int i = 0; i < qtd; i++) {
-printf("Territorio %d:\n", i + 1);
-printf(" Nome: %s\n", mapa[i].nome);
-printf(" Cor: %s\n", mapa[i].cor);
-printf(" Tropas: %d\n\n", mapa[i].tropas);
-}
-}
-
 // Função que simula ataque entre territórios
 void atacar(Territorio* atacante, Territorio* defensor) {
 int dadoAtacante = rand() % 6 + 1; // 1 a 6
@@ -81,14 +72,13 @@ int verificarMissao(char* missao, Territorio* mapa, int qtd) {
 // Por enquanto, retorna 0 (não cumprida)
 return 0;
 }
-
 int main() {
-srand(time(NULL));
-
-int numTerritorios;
-printf("Digite o número de territórios a cadastrar: ");
-scanf("%d", &numTerritorios);
-
+    srand(time(NULL));
+    int numTerritorios;
+    printf("Digite o número de territórios a cadastrar: ");
+    scanf("%d", &numTerritorios);
+    getchar(); // Limpa o buffer
+}
 // Cadastro de territórios
 Territorio* mapa = cadastrarTerritorios(numTerritorios);
 
